@@ -1,11 +1,16 @@
 {
   "name": "rpc-proxy",
   "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "@injectivelabs/networks": "^1.14.13",
+    "@injectivelabs/sdk-ts": "^1.14.13",
+    "@stellar/stellar-sdk": "^12.3.0",
+    "hyper-express": "^6.17.2"
+  }
 }
