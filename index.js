@@ -1,4 +1,3 @@
-const fs = require('fs')
 const HyperExpress = require('hyper-express')
 const process = require('process')
 const chains = require('./chains')
@@ -24,7 +23,7 @@ async function main() {
     .then(() => {
       console.timeEnd('Api Server init')
       console.log('Webserver started on port ' + port)
-      process.send('ready')
+      // process.send('ready')
     })
     .catch((e) => console.log('Failed to start webserver on port ' + port, e))
 }
