@@ -6,7 +6,10 @@ const ripple = require('./ripple')
 function setRoutes(router) {
   [
     stellar, injective, fuel, ripple,
-  ].forEach(chain => chain.setRoutes(router))
+  ].forEach(chain => {
+    console.log('adding chain route:', chain)
+    chain.setRoutes(router)
+  })
 }
 
 module.exports = {
