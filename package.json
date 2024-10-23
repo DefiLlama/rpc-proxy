@@ -12,6 +12,7 @@
     "@injectivelabs/sdk-ts": "^1.14.13",
     "@stellar/stellar-sdk": "^12.3.0",
     "fuels": "^0.96.1",
-    "hyper-express": "^6.17.2"
+    "hyper-express": "^6.17.2",
+    "xrpl": "^4.0.0"
   }
 }
