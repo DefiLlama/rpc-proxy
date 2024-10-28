@@ -1,14 +1,14 @@
-const stellar = require('./stellar')
-const injective = require('./injective')
-const fuel = require('./fuel')
-const ripple = require('./ripple')
+const chains = {
+  stellar: require('./stellar'),
+  injective: require('./injective'),
+  fuel: require('./fuel'),
+  ripple: require('./ripple'),
+}
 
 function setRoutes(router) {
-  [
-    stellar, injective, fuel, ripple,
-  ].forEach(chain => {
-    console.log('adding chain route:', chain)
-    chain.setRoutes(router)
+  Object.entries(chains).forEach(([chain, { setRoutes }]) => {
+    console.log(`Setting routes for ${chain}`)
+    setRoutes(router)
   })
 }
 

@@ -8,6 +8,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@defillama/sdk": "^5.0.96",
     "@injectivelabs/networks": "^1.14.13",
     "@injectivelabs/sdk-ts": "^1.14.13",
     "@stellar/stellar-sdk": "^12.3.0",
