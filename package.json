@@ -11,6 +11,8 @@
     "@defillama/sdk": "^5.0.96",
     "@injectivelabs/networks": "^1.14.13",
     "@injectivelabs/sdk-ts": "^1.14.13",
+    "@kamino-finance/kliquidity-sdk": "^6.4.2",
+    "@solana/web3.js": "^1.95.8",
     "@stellar/stellar-sdk": "^12.3.0",
     "fuels": "^0.96.1",
     "hyper-express": "^6.17.2",

@@ -3,6 +3,7 @@ const chains = {
   injective: require('./injective'),
   fuel: require('./fuel'),
   ripple: require('./ripple'),
+  kamino: require('./kamino'),
 }
 
 function setRoutes(router) {
