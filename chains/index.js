@@ -4,6 +4,7 @@ const chains = {
   fuel: require('./fuel'),
   ripple: require('./ripple'),
   kamino: require('./kamino'),
+  drift: require('./drift'),
 }
 
 function setRoutes(router) {
