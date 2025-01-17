@@ -54,8 +54,8 @@ function setRoutes(routerPrime) {
     res.json(await getCachedTvl())
   })
 
-  router.post('/lend/market', async (req, res) => {
-    const { market } = req.body
+  router.get('/lend/:market', async (req, res) => {
+    const { market } = req.params
     res.json(await getKaminoLendMarketReserves(market))
   })
 }
