@@ -33,7 +33,8 @@ async function getKaminoLendMarketReserves(market) {
   return [...reserves].map(([_, i]) => ({
     token: i.state.collateral.mintPubkey.toString(),
     price: Number(i.tokenOraclePrice.price),
-    decimals: i.tokenOraclePrice.decimals.e
+    decimals: i.tokenOraclePrice.decimals.e,
+    symbol: i.symbol,
   }))
 }
 
