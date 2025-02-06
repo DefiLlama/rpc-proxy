@@ -43,7 +43,7 @@ async function getCachedVaultTvl(vault, version) {
 
 /// INIT DRIFT SDK
 const initialize = async () => {
-  const connection = new Connection('https://cold-hanni-fast-mainnet.helius-rpc.com/');
+  const connection = new Connection(process.env.SOLANA_RPC);
   const wallet = Keypair.generate();
   const initializeDriftClient = async () => {
     const driftClient = new DriftClient({
