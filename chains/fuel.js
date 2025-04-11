@@ -3,7 +3,7 @@ const { Provider, Contract } = require('fuels')
 
 let provider
 async function getProvider() {
-  if (!provider) provider = Provider.create('https://mainnet.fuel.network/v1/graphql')
+  if (!provider) provider = new Provider('https://mainnet.fuel.network/v1/graphql')
   return provider
 }
 
