@@ -83,7 +83,7 @@ const USDC_ID = "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75";
 const BLND_ID = "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY";
 
 async function getbackstopData(BACKSTOP_ID) {
-  const tvlApi = new sdk.ChainApi({ chain: 'stellar' });
+  const api = new sdk.ChainApi({ chain: 'stellar' });
   let backstopTokeData = await BackstopToken.load(network, BACKCSTOP_TOKEN_ID, BLND_ID, USDC_ID);
 
   let totalBackstopTokens = await getTokenBalance(BACKCSTOP_TOKEN_ID, BACKSTOP_ID);
