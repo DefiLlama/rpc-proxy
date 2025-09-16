@@ -6,6 +6,7 @@ const chains = {
   kamino: require('./kamino'),
   drift: require('./drift'),
   beacon: require('./beacon'),
+  sui: require('./sui'),
 }
 
 function setRoutes(router) {

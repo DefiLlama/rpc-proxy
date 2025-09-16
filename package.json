@@ -16,6 +16,8 @@
     "@injectivelabs/sdk-ts": "^1.14.13",
     "@kamino-finance/klend-sdk": "^5.10.10",
     "@kamino-finance/kliquidity-sdk": "^7.0.0",
+    "@mysten/bcs": "^1.8.0",
+    "@mysten/sui": "^1.38.0",
     "@project-serum/anchor": "^0.26.0",
     "@solana/web3.js": "^1.95.8",
     "@stellar/stellar-sdk": "^13.0.0",
