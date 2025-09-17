@@ -7,7 +7,6 @@ const BigNumber = require("bignumber.js");
 const suiClient = new SuiClient({
   url: "https://sui-rpc.publicnode.com",
 });
-const txb = new Transaction();
 
 function setRoutes(routerPrime) {
   const router = new HyperExpress.Router();
@@ -16,6 +15,8 @@ function setRoutes(routerPrime) {
 
   router.post("/query", async (req, res) => {
     const { target, contractId, typeArguments, sender } = await req.json();
+
+    const txb = new Transaction();
 
     txb.moveCall({
       target,
