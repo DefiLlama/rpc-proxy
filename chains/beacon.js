@@ -92,11 +92,6 @@ function fetchValidatorsStream() {
         items[withdrawalCredentials].b += +value.balance
         items[withdrawalCredentials].vc += 1
 
-        let publicKey = value.validator.pubkey.toLowerCase()
-        if (!items[publicKey])
-          items[publicKey] = { b: 0, vc: 0 }
-        items[publicKey].b += +value.balance
-        items[publicKey].vc += 1
       })
       res.on('end', () => {
         try {
@@ -135,10 +130,9 @@ function setRoutes(routerPrime) {
   routerPrime.use('/beacon', router)
 
   router.get('/total_staked', async (req, res) => {
-    let { withdrawal_credentials = '', public_keys = '' } = req.query
+    let { withdrawal_credentials = '' } = req.query
     withdrawal_credentials = withdrawal_credentials.split(',').map(vc => vc.trim().toLowerCase().slice(-40))
-    public_keys = public_keys.split(',').map(pk => pk.trim().toLowerCase())
-    
+
     try {
       const cache = await getValidators()
       const response = {
@@ -153,14 +147,6 @@ function setRoutes(routerPrime) {
           response.total_balance += validator.b
           response.total_balance_formatted += validator.b / 1e9
           response.metadata['0x' + wc] = validator
-        }
-      })
-      public_keys.forEach(pk => {
-        const validator = cache[pk.toLowerCase()]
-        if (validator) {
-          response.total_balance += validator.b
-          response.total_balance_formatted += validator.b / 1e9
-          response.metadata[pk] = validator
         }
       })
       return res.json(response)
