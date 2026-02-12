@@ -13,11 +13,16 @@ function setRoutes(routerPrime) {
   routerPrime.use('/fuel', router)
 
   router.post('/query', async (req, res) => {
+    console.log('fuel query entry')
     const { contractId, abi, method, params = [] } = await req.json()
+    console.log(`fuel query unpacked req: ${contractId}`)
 
     const contract = new Contract(contractId, abi, await getProvider())
+    console.log(`fuel query contract created: ${contractId}`)
     const { value } = await contract.functions[method](...params).get()
+    console.log(`fuel query result got: ${contractId}`)
     res.json(value)
+    console.log(`fuel query result sent: ${contractId}`)
   })
 }
 
