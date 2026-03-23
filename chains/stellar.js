@@ -38,6 +38,14 @@ function setRoutes(routerPrime) {
       res.status(500).json({ error: error.message });
     }
   })
+  router.get('/total-supply/:contractId', async (req, res) => {
+    const { contractId } = req.params
+    try {
+      res.json(await getSorobanTotalSupply(contractId));
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  })
   router.get('/blend-get-backstop/:backstopId', async (req, res) => {
     const { backstopId } = req.params
 
@@ -92,6 +100,24 @@ async function getbackstopData(BACKSTOP_ID) {
   api.add(USDC_ID, totalUSDC);
   api.add(BLND_ID, totalBLND);
   return api.getBalances()
+}
+
+async function getSorobanTotalSupply(contractId) {
+  const server = new rpc.Server(rpcUrl);
+  const account = new Account('GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGO6V', '123');
+  const tx = new TransactionBuilder(account, {
+    fee: '100',
+    timebounds: { minTime: 0, maxTime: 0 },
+    networkPassphrase: Networks.PUBLIC,
+  })
+    .addOperation(new Contract(contractId).call('total_supply'))
+    .build();
+
+  const sim = await server.simulateTransaction(tx);
+  if (rpc.Api.isSimulationSuccess(sim)) {
+    return scValToNative(sim.result.retval).toString();
+  }
+  throw Error(`total_supply simulation failed for ${contractId}`);
 }
 
 async function getBlendPoolData(BACKSTOP_ID) {
