@@ -1,14 +1,17 @@
 # Use the official Node.js 22 image as the base image
 FROM node:22
 
+# Enable corepack for pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
 # Set the working directory
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+# Copy package.json and pnpm-lock.yaml
+COPY package.json pnpm-lock.yaml ./
 
 # Install dependencies
-RUN npm install
+RUN pnpm install --frozen-lockfile
 
 # Copy the rest of the application code
 COPY . .
@@ -17,4 +20,4 @@ COPY . .
 EXPOSE 5001
 
 # Command to run the application
-CMD ["npm", "run", "start"]
+CMD ["pnpm", "run", "start"]
