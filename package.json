@@ -2,7 +2,7 @@
   "name": "rpc-proxy",
   "version": "1.0.0",
   "scripts": {
-    "start": "node index.js"
+    "start": "node --experimental-require-module index.js"
   },
   "author": "",
   "license": "ISC",
