@@ -22,6 +22,7 @@
     "@solana/web3.js": "^1.95.8",
     "@stellar/stellar-sdk": "^13.0.0",
     "axios": "^1.10.0",
+    "bignumber.js": "^10.0.2",
     "fuels": "^0.100.0",
     "hyper-express": "^6.17.2",
     "stream-json": "^1.9.1",

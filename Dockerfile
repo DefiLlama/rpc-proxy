@@ -1,5 +1,5 @@
 # Use the official Node.js 22 image as the base image
-FROM node:22
+FROM node:23
 
 # Enable corepack for pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
