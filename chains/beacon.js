@@ -82,7 +82,7 @@ function fetchValidatorsStream() {
       pipelineStream.on('data', ({ value }) => {
         ++i
 
-        if (i % 10000 === 0) {
+        if (i % 100000 === 0) {
           console.log(`Processed ${i / 1e6}M validators...`);
         }
 
