@@ -46,6 +46,14 @@ function setRoutes(routerPrime) {
       res.status(500).json({ error: error.message });
     }
   })
+  router.get('/contract-call/:contractId/:method', async (req, res) => {
+    const { contractId, method } = req.params
+    try {
+      res.json(await callSorobanContract(contractId, method));
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  })
   router.get('/blend-get-backstop/:backstopId', async (req, res) => {
     const { backstopId } = req.params
 
@@ -103,6 +111,13 @@ async function getbackstopData(BACKSTOP_ID) {
 }
 
 async function getSorobanTotalSupply(contractId) {
+  return callSorobanContract(contractId, 'total_supply');
+}
+
+async function callSorobanContract(contractId, method) {
+  if (!/^C[A-Z2-7]{55}$/.test(contractId)) throw Error(`invalid contract id: ${contractId}`);
+  if (!/^[A-Za-z0-9_]+$/.test(method)) throw Error(`invalid method: ${method}`);
+
   const server = new rpc.Server(rpcUrl);
   const account = new Account('GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGO6V', '123');
   const tx = new TransactionBuilder(account, {
@@ -110,14 +125,14 @@ async function getSorobanTotalSupply(contractId) {
     timebounds: { minTime: 0, maxTime: 0 },
     networkPassphrase: Networks.PUBLIC,
   })
-    .addOperation(new Contract(contractId).call('total_supply'))
+    .addOperation(new Contract(contractId).call(method))
     .build();
 
   const sim = await server.simulateTransaction(tx);
   if (rpc.Api.isSimulationSuccess(sim)) {
     return scValToNative(sim.result.retval).toString();
   }
-  throw Error(`total_supply simulation failed for ${contractId}`);
+  throw Error(`${method} simulation failed for ${contractId}`);
 }
 
 async function getBlendPoolData(BACKSTOP_ID) {
