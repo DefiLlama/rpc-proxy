@@ -1,5 +1,5 @@
 # Use the official Node.js 22 image as the base image
-FROM node:23
+FROM node:24
 
 # Enable corepack for pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
@@ -11,7 +11,7 @@ WORKDIR /usr/src/app
 COPY package.json pnpm-lock.yaml ./
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # Copy the rest of the application code
 COPY . .
