@@ -14,7 +14,6 @@ async function getCachedTvl() {
   if (cachedTvl && cacheTimestamp && (now - cacheTimestamp < cacheDuration))
     return cachedTvl
 
-
   cachedTvl = getTvl()
   cacheTimestamp = now
   return cachedTvl
@@ -29,7 +28,7 @@ async function getCachedTvl() {
 
 async function getKaminoLendMarketReserves(market) {
   market = new PublicKey(market)
-  const  reserves  = await getReservesForMarket(market, getConnection(), PROGRAM_ID)
+  const reserves = await getReservesForMarket(market, getConnection(), PROGRAM_ID)
   return [...reserves].map(([_, i]) => ({
     token: i.state.collateral.mintPubkey.toString(),
     price: Number(i.tokenOraclePrice.price),
@@ -51,12 +50,23 @@ function setRoutes(routerPrime) {
   routerPrime.use('/kamino', router)
 
   router.get('/tvl', async (_req, res) => {
-    res.json(await getCachedTvl())
+    try {
+      res.json(await getCachedTvl())
+    } catch (e) {
+      console.error('[kamino] /tvl error:', e)
+      res.status(500).json({ error: 'Internal server error' })
+    }
   })
 
   router.get('/lend/:market', async (req, res) => {
-    const { market } = req.params
-    res.json(await getKaminoLendMarketReserves(market))
+    try {
+      const { market } = req.params
+      if (!market) return res.status(400).json({ error: 'market is required' })
+      res.json(await getKaminoLendMarketReserves(market))
+    } catch (e) {
+      console.error('[kamino] /lend error:', e)
+      res.status(500).json({ error: 'Internal server error' })
+    }
   })
 }
 
