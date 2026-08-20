@@ -32,7 +32,7 @@ async function getKaminoLendMarketReserves(market) {
   const  reserves  = await getReservesForMarket(market, getConnection(), PROGRAM_ID)
   return [...reserves].map(([_, i]) => ({
     token: i.state.collateral.mintPubkey.toString(),
-    price: Number(i.tokenOraclePrice.price),
+    price: i.getOracleMarketPrice().div(i.getCollateralExchangeRate()).toNumber(),
     decimals: i.tokenOraclePrice.decimals.e,
     symbol: i.symbol,
   }))
