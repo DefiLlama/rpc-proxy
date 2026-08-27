@@ -65,9 +65,10 @@ function setRoutes(routerPrime) {
   })
   router.get('/blend-get-pool-data/:backstopId', async (req, res) => {
     const { backstopId } = req.params
+    const { pools } = req.query
 
     try {
-      res.json(await getBlendPoolData(backstopId));
+      res.json(await getBlendPoolData(backstopId, pools));
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -135,11 +136,15 @@ async function callSorobanContract(contractId, method) {
   throw Error(`${method} simulation failed for ${contractId}`);
 }
 
-async function getBlendPoolData(BACKSTOP_ID) {
+async function getBlendPoolData(BACKSTOP_ID, pools = '') {
   const tvlApi = new sdk.ChainApi({ chain: 'stellar' });
   const borrowedApi = new sdk.ChainApi({ chain: 'stellar' });
   let backstop = await BackstopConfig.load(network, BACKSTOP_ID);
-  for (const poolId of backstop.rewardZone) {
+  // reward zone is BLND emissions eligibility, not the pool universe: Blend emptied it for V2 on 2026-08-26, zeroing tvl
+  const callerPools = String(pools).split(',').filter(i => /^C[A-Z2-7]{55}$/.test(i));
+  const poolIds = [...new Set([...backstop.rewardZone, ...callerPools])];
+  if (!poolIds.length) throw Error(`no blend pools resolved for backstop ${BACKSTOP_ID}`);
+  for (const poolId of poolIds) {
     const Pool = BACKSTOP_ID === 'CAO3AGAMZVRMHITL36EJ2VZQWKYRPWMQAPDQD5YEOF3GIF7T44U4JAL3' ? PoolV1 : PoolV2;
     let pool = await Pool.load(network, poolId);
 
