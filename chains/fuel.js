@@ -13,11 +13,25 @@ function setRoutes(routerPrime) {
   routerPrime.use('/fuel', router)
 
   router.post('/query', async (req, res) => {
-    const { contractId, abi, method, params = [] } = await req.json()
+    try {
+      const { contractId, abi, method, params = [] } = await req.json()
 
-    const contract = new Contract(contractId, abi, await getProvider())
-    const { value } = await contract.functions[method](...params).get()
-    res.json(value)
+      if (!contractId || !abi || !method) {
+        return res.status(400).json({ error: 'contractId, abi and method are required' })
+      }
+
+      const contract = new Contract(contractId, abi, await getProvider())
+
+      if (typeof contract.functions[method] !== 'function') {
+        return res.status(400).json({ error: `method "${method}" does not exist on contract` })
+      }
+
+      const { value } = await contract.functions[method](...params).get()
+      res.json(value)
+    } catch (e) {
+      console.error('[fuel] /query error:', e)
+      res.status(500).json({ error: 'Internal server error' })
+    }
   })
 }
 

@@ -23,22 +23,41 @@ function setRoutes(routerPrime) {
   routerPrime.use('/injective', router)
 
   router.get('/mito-vault/:address', async (req, res) => {
-    const { address } = req.params
-    const response = await getMitoApi().fetchVault({ contractAddress: address })
-    res.json(response)
+    try {
+      const { address } = req.params
+      if (!address) return res.status(400).json({ error: 'address is required' })
+      const response = await getMitoApi().fetchVault({ contractAddress: address })
+      res.json(response)
+    } catch (e) {
+      console.error('[injective] /mito-vault error:', e)
+      res.status(500).json({ error: 'Internal server error' })
+    }
   })
+
   router.post('/orderbook/markets', async (req, res) => {
-    const {type = TYPES.SPOT, marketStatus = 'active' } = await req.json()
-    const markets = await getClient(type).fetchMarkets({ marketStatus, })
-    res.json(p2j(markets))
+    try {
+      const { type = TYPES.SPOT, marketStatus = 'active' } = await req.json()
+      const markets = await getClient(type).fetchMarkets({ marketStatus })
+      res.json(p2j(markets))
+    } catch (e) {
+      console.error('[injective] /orderbook/markets error:', e)
+      res.status(500).json({ error: 'Internal server error' })
+    }
   })
+
   router.post('/orderbook/orders', async (req, res) => {
-    const {type = TYPES.SPOT, marketIds} = await req.json()
-    const chunks = sliceIntoChunks(marketIds, 20)
-    const response = []
-    for (const chunk of chunks)
-      response.push(...await getClient(type).fetchOrderbooksV2(chunk))
-    res.json(response)
+    try {
+      const { type = TYPES.SPOT, marketIds } = await req.json()
+      if (!Array.isArray(marketIds) || marketIds.length === 0) {
+        return res.status(400).json({ error: 'marketIds must be a non-empty array' })
+      }
+      const chunks = sliceIntoChunks(marketIds, 20)
+      const results = await Promise.all(chunks.map((chunk) => getClient(type).fetchOrderbooksV2(chunk)))
+      res.json(results.flat())
+    } catch (e) {
+      console.error('[injective] /orderbook/orders error:', e)
+      res.status(500).json({ error: 'Internal server error' })
+    }
   })
 }
 
@@ -63,8 +82,8 @@ function getClient(type = TYPES.SPOT) {
       clients[type] = new IndexerGrpcSpotApi(network.indexer);
     else if (type === TYPES.DERIVATIVES)
       clients[type] = new IndexerGrpcDerivativesApi(network.indexer)
-    else if(type === TYPES.BANK)
-    clients[type] = new ChainGrpcBankApi(network.grpc)
+    else if (type === TYPES.BANK)
+      clients[type] = new ChainGrpcBankApi(network.grpc)
     else
       throw new Error('Unknown type')
   }
