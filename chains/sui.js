@@ -14,27 +14,36 @@ function setRoutes(routerPrime) {
   routerPrime.use("/sui", router);
 
   router.post("/query", async (req, res) => {
-    const { target, contractId, typeArguments, sender } = await req.json();
+    try {
+      const { target, contractId, typeArguments, sender } = await req.json();
 
-    const txb = new Transaction();
+      if (!target || !contractId || !sender) {
+        return res.status(400).json({ error: "target, contractId and sender are required" });
+      }
 
-    txb.moveCall({
-      target,
-      arguments: [txb.object(contractId)],
-      typeArguments,
-    });
+      const txb = new Transaction();
 
-    const result = (
-      await suiClient.devInspectTransactionBlock({
-        transactionBlock: txb,
-        sender,
-      })
-    ).results[0].returnValues.map(
-      ([bytes, _]) =>
-        new BigNumber(bcs.bcs.u64().parse(Uint8Array.from(bytes))),
-    );
+      txb.moveCall({
+        target,
+        arguments: [txb.object(contractId)],
+        typeArguments,
+      });
 
-    res.json(result);
+      const result = (
+        await suiClient.devInspectTransactionBlock({
+          transactionBlock: txb,
+          sender,
+        })
+      ).results[0].returnValues.map(
+        ([bytes, _]) =>
+          new BigNumber(bcs.bcs.u64().parse(Uint8Array.from(bytes))),
+      );
+
+      res.json(result);
+    } catch (e) {
+      console.error("[sui] /query error:", e);
+      res.status(500).json({ error: "Internal server error" });
+    }
   });
 }
 
