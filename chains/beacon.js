@@ -5,7 +5,7 @@ const { pipeline } = require('stream');
 const { streamArray } = require('stream-json/streamers/StreamArray')
 const { pick } = require('stream-json/filters/Pick');
 const { parser } = require('stream-json');
-const HyperExpress = require('hyper-express');
+const express = require('express');
 
 const CACHE_FILE = path.join(__dirname, 'beacon_validators_cache.json');
 const CACHE_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours
@@ -126,7 +126,7 @@ async function getValidators() {
 
 
 function setRoutes(routerPrime) {
-  const router = new HyperExpress.Router()
+  const router = express.Router()
   routerPrime.use('/beacon', router)
 
   router.get('/total_staked', async (req, res) => {

@@ -1,4 +1,4 @@
-const HyperExpress = require('hyper-express')
+const express = require('express')
 const { rpc, Networks, Address, xdr, Asset, scValToNative, Account, nativeToScVal, TransactionBuilder, Contract } = require('@stellar/stellar-sdk');
 const { BackstopToken, BackstopConfig, PoolV2, PoolV1 } = require('@blend-capital/blend-sdk');
 const sdk = require('@defillama/sdk')
@@ -11,7 +11,7 @@ const network = {
 };
 
 function setRoutes(routerPrime) {
-  const router = new HyperExpress.Router()
+  const router = express.Router()
   routerPrime.use('/stellar', router)
 
   router.get('/balances/:address', async (req, res) => {
@@ -38,22 +38,8 @@ function setRoutes(routerPrime) {
       res.status(500).json({ error: error.message });
     }
   })
-  router.get('/total-supply/:contractId', async (req, res) => {
-    const { contractId } = req.params
-    try {
-      res.json(await getSorobanTotalSupply(contractId));
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  })
-  router.get('/contract-call/:contractId/:method', async (req, res) => {
-    const { contractId, method } = req.params
-    try {
-      res.json(await callSorobanContract(contractId, method));
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  })
+  // /total-supply and /contract-call were removed: defillama-server reads Soroban contracts
+  // directly through @defillama/sdk (sdk.chains.stellar) since 5.0.236.
   router.get('/blend-get-backstop/:backstopId', async (req, res) => {
     const { backstopId } = req.params
 
@@ -109,31 +95,6 @@ async function getbackstopData(BACKSTOP_ID) {
   api.add(USDC_ID, totalUSDC);
   api.add(BLND_ID, totalBLND);
   return api.getBalances()
-}
-
-async function getSorobanTotalSupply(contractId) {
-  return callSorobanContract(contractId, 'total_supply');
-}
-
-async function callSorobanContract(contractId, method) {
-  if (!/^C[A-Z2-7]{55}$/.test(contractId)) throw Error(`invalid contract id: ${contractId}`);
-  if (!/^[A-Za-z0-9_]+$/.test(method)) throw Error(`invalid method: ${method}`);
-
-  const server = new rpc.Server(rpcUrl);
-  const account = new Account('GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGO6V', '123');
-  const tx = new TransactionBuilder(account, {
-    fee: '100',
-    timebounds: { minTime: 0, maxTime: 0 },
-    networkPassphrase: Networks.PUBLIC,
-  })
-    .addOperation(new Contract(contractId).call(method))
-    .build();
-
-  const sim = await server.simulateTransaction(tx);
-  if (rpc.Api.isSimulationSuccess(sim)) {
-    return scValToNative(sim.result.retval).toString();
-  }
-  throw Error(`${method} simulation failed for ${contractId}`);
 }
 
 async function getBlendPoolData(BACKSTOP_ID, pools = '') {

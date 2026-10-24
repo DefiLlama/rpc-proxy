@@ -1,7 +1,7 @@
 const { Kamino } = require('@kamino-finance/kliquidity-sdk')
 const { getReservesForMarket, PROGRAM_ID } = require('@kamino-finance/klend-sdk')
 const { Connection, } = require("@solana/web3.js")
-const HyperExpress = require('hyper-express')
+const express = require('express')
 const { PublicKey } = require('@solana/web3.js')
 
 let cachedTvl = null
@@ -47,7 +47,7 @@ function getConnection() {
 }
 
 function setRoutes(routerPrime) {
-  const router = new HyperExpress.Router()
+  const router = express.Router()
   routerPrime.use('/kamino', router)
 
   router.get('/tvl', async (_req, res) => {

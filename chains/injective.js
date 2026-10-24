@@ -1,4 +1,4 @@
-const HyperExpress = require('hyper-express')
+const express = require('express')
 const { getNetworkInfo, Network } = require('@injectivelabs/networks')
 const { IndexerGrpcMitoApi, protoObjectToJson, IndexerGrpcSpotApi, IndexerGrpcDerivativesApi, ChainGrpcBankApi } = require('@injectivelabs/sdk-ts')
 let clients = {}
@@ -19,7 +19,7 @@ function getMitoApi() {
 
 
 function setRoutes(routerPrime) {
-  const router = new HyperExpress.Router()
+  const router = express.Router()
   routerPrime.use('/injective', router)
 
   router.get('/mito-vault/:address', async (req, res) => {
@@ -28,12 +28,12 @@ function setRoutes(routerPrime) {
     res.json(response)
   })
   router.post('/orderbook/markets', async (req, res) => {
-    const {type = TYPES.SPOT, marketStatus = 'active' } = await req.json()
+    const {type = TYPES.SPOT, marketStatus = 'active' } = req.body
     const markets = await getClient(type).fetchMarkets({ marketStatus, })
     res.json(p2j(markets))
   })
   router.post('/orderbook/orders', async (req, res) => {
-    const {type = TYPES.SPOT, marketIds} = await req.json()
+    const {type = TYPES.SPOT, marketIds} = req.body
     const chunks = sliceIntoChunks(marketIds, 20)
     const response = []
     for (const chunk of chunks)

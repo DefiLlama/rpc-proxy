@@ -1,4 +1,4 @@
-const HyperExpress = require("hyper-express");
+const express = require("express");
 const { Transaction } = require("@mysten/sui/transactions");
 const { SuiClient } = require("@mysten/sui/client");
 const bcs = require("@mysten/bcs");
@@ -9,12 +9,12 @@ const suiClient = new SuiClient({
 });
 
 function setRoutes(routerPrime) {
-  const router = new HyperExpress.Router();
+  const router = express.Router();
 
   routerPrime.use("/sui", router);
 
   router.post("/query", async (req, res) => {
-    const { target, contractId, typeArguments, sender } = await req.json();
+    const { target, contractId, typeArguments, sender } = req.body;
 
     const txb = new Transaction();
 

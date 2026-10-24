@@ -1,13 +1,13 @@
-const HyperExpress = require('hyper-express')
+const express = require('express')
 const xrpl = require("xrpl");
 
 function setRoutes(routerPrime) {
-  const router = new HyperExpress.Router()
+  const router = express.Router()
 
   routerPrime.use('/ripple', router)
 
   router.post('/gateway_balances', async (req, res) => {
-    const { account, hotwallet } = await req.json()
+    const { account, hotwallet } = req.body
     const client = new xrpl.Client('wss://xrplcluster.com/');
     await client.connect();
   

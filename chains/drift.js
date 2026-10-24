@@ -2,7 +2,7 @@ const { Connection, Keypair } = require("@solana/web3.js");
 const { AnchorProvider, Program } = require('@project-serum/anchor');
 const { DriftClient } = require('@drift-labs/sdk');
 const { IDL, VAULT_PROGRAM_ID, VaultClient } = require("@drift-labs/vaults-sdk");
-const HyperExpress = require('hyper-express');
+const express = require('express');
 const { PublicKey } = require("@solana/web3.js");
 
 let initialized, client, client_jlpdnv1
@@ -75,7 +75,7 @@ const initialize = async () => {
 };
 
 function setRoutes(routerPrime) {
-  const router = new HyperExpress.Router()
+  const router = express.Router()
   routerPrime.use('/drift', router)
 
   router.get('/vault_tvl', async (req, res) => {

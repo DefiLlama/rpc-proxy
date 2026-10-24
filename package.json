@@ -23,8 +23,8 @@
     "@stellar/stellar-sdk": "^13.0.0",
     "axios": "^1.10.0",
     "bignumber.js": "^10.0.2",
+    "express": "^5.1.0",
     "fuels": "^0.100.0",
-    "hyper-express": "^6.17.2",
     "stream-json": "^1.9.1",
     "xrpl": "^4.0.0"
   }

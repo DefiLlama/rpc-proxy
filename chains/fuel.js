@@ -1,4 +1,4 @@
-const HyperExpress = require('hyper-express')
+const express = require('express')
 const { Provider, Contract } = require('fuels')
 
 let provider
@@ -8,12 +8,12 @@ async function getProvider() {
 }
 
 function setRoutes(routerPrime) {
-  const router = new HyperExpress.Router()
+  const router = express.Router()
 
   routerPrime.use('/fuel', router)
 
   router.post('/query', async (req, res) => {
-    const { contractId, abi, method, params = [] } = await req.json()
+    const { contractId, abi, method, params = [] } = req.body
 
     const contract = new Contract(contractId, abi, await getProvider())
     const { value } = await contract.functions[method](...params).get()
