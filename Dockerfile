@@ -1,8 +1,8 @@
-# Use the official Node.js 22 image as the base image
-FROM node:22
+# Use the official Node.js 26 image as the base image
+FROM node:26
 
-# Enable corepack for pnpm
-RUN corepack enable && corepack prepare pnpm@10 --activate
+# Install pnpm (corepack is no longer bundled in Node 25+ images)
+RUN npm install -g pnpm@10
 
 # Set the working directory
 WORKDIR /usr/src/app
