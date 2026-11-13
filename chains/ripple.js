@@ -10,16 +10,22 @@ function setRoutes(routerPrime) {
     const { account, hotwallet } = req.body
     const client = new xrpl.Client('wss://xrplcluster.com/');
     await client.connect();
-  
-    const issuerAccountInfo = await client.request({
-      command: 'gateway_balances',
-      account,
-      hotwallet: [hotwallet],
-    });
-  
-    client.disconnect();
 
-    res.json(issuerAccountInfo.result)
+    try {
+      const issuerAccountInfo = await client.request({
+        command: 'gateway_balances',
+        account,
+        hotwallet: [hotwallet],
+      });
+
+      res.json(issuerAccountInfo.result)
+    } finally {
+      try {
+        await client.disconnect();
+      } catch (e) {
+        console.error('Failed to disconnect xrpl client', e);
+      }
+    }
   })
 }
 
