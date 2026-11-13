@@ -9,7 +9,7 @@
   "description": "",
   "dependencies": {
     "@blend-capital/blend-sdk": "^3.0.1",
-    "@defillama/sdk": "5.0.250",
+    "@defillama/sdk": "5.0.251",
     "@drift-labs/sdk": "^2.118.0-beta",
     "@drift-labs/vaults-sdk": "^0.6.0",
     "@injectivelabs/networks": "^1.14.13",

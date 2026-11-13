@@ -12,8 +12,8 @@ importers:
         specifier: ^3.0.1
         version: 3.2.2(debug@4.4.3(supports-color@7.2.0))
       '@defillama/sdk':
-        specifier: 5.0.250
-        version: 5.0.250(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.6.3)(utf-8-validate@5.0.10))(bufferutil@4.1.0)(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@4.0.17)
+        specifier: 5.0.251
+        version: 5.0.251(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.6.3)(utf-8-validate@5.0.10))(bufferutil@4.1.0)(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@4.0.17)
       '@drift-labs/sdk':
         specifier: ^2.118.0-beta
         version: 2.156.0(@solana/sysvars@2.3.0(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3))(bufferutil@4.1.0)(debug@4.4.3(supports-color@7.2.0))(fastestsmallesttextencoderdecoder@1.0.22)(supports-color@7.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)(ws@8.20.0(bufferutil@4.1.0)(utf-8-validate@5.0.10))
@@ -332,8 +332,8 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
-  '@defillama/sdk@5.0.250':
-    resolution: {integrity: sha512-h6CidP6PlYJ1Q2j7e3GBC3MzbzhgkLpKC6jAxENyAmCTMBZi+GGl+5wXvLx2g3JLo7zUkHqxwRqthJ2HqAJ9+Q==}
+  '@defillama/sdk@5.0.251':
+    resolution: {integrity: sha512-GpFNpRe4v2WrfVKxlzx5nnVBvgEknciX19TDu+IpbbnS79uoA6SBDzBwJdiXPBDnXBdEYvpLuneYcYqi3zwdmQ==}
     peerDependencies:
       '@solana/web3.js': '>=1.73.0'
     peerDependenciesMeta:
@@ -5257,7 +5257,7 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@defillama/sdk@5.0.250(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.6.3)(utf-8-validate@5.0.10))(bufferutil@4.1.0)(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@4.0.17)':
+  '@defillama/sdk@5.0.251(@solana/web3.js@1.98.4(bufferutil@4.1.0)(typescript@5.6.3)(utf-8-validate@5.0.10))(bufferutil@4.1.0)(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.6.3)(utf-8-validate@5.0.10)(zod@4.0.17)':
     dependencies:
       '@aws-sdk/client-s3': 3.1016.0
       '@elastic/elasticsearch': 8.19.1(supports-color@7.2.0)
