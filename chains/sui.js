@@ -24,12 +24,16 @@ function setRoutes(routerPrime) {
       typeArguments,
     });
 
-    const result = (
-      await suiClient.devInspectTransactionBlock({
-        transactionBlock: txb,
-        sender,
-      })
-    ).results[0].returnValues.map(
+    const inspected = await suiClient.devInspectTransactionBlock({
+      transactionBlock: txb,
+      sender,
+    });
+
+    const returnValues = inspected.results?.[0]?.returnValues;
+    if (!returnValues)
+      throw Error(`${target} returned no values: ${inspected.error ?? JSON.stringify(inspected.effects?.status ?? {})}`);
+
+    const result = returnValues.map(
       ([bytes, _]) =>
         new BigNumber(bcs.bcs.u64().parse(Uint8Array.from(bytes))),
     );

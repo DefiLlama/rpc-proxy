@@ -77,7 +77,7 @@ async function getTokenBalance(token, address) {
     const val = scValToNative(scval_result.result.retval)
     return val.toString()
   } else {
-    throw Error(`unable to fetch balance for token: ${token_id}`);
+    throw Error(`unable to fetch balance for token ${token}: ${JSON.stringify(scval_result.error ?? scval_result)}`);
   }
 }
 

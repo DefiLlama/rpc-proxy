@@ -21,6 +21,12 @@ async function main() {
 
   chains.setRoutes(router)
 
+  app.use((err, _req, res, next) => {
+    console.error('Request failed', err)
+    if (res.headersSent) return next(err)
+    res.status(500).json({ error: err?.message ?? 'Internal server error' })
+  })
+
   server = app.listen(port, () => {
     console.timeEnd('Api Server init')
     console.log('Webserver started on port ' + port)
