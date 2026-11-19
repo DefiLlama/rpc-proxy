@@ -130,8 +130,12 @@ function setRoutes(routerPrime) {
   routerPrime.use('/beacon', router)
 
   router.get('/total_staked', async (req, res) => {
-    let { withdrawal_credentials = '' } = req.query
-    withdrawal_credentials = withdrawal_credentials.split(',').map(vc => vc.trim().toLowerCase().slice(-40))
+    const { withdrawal_credentials = '' } = req.query
+    const credentials = [...new Set([]
+      .concat(withdrawal_credentials)
+      .flatMap(i => String(i).split(','))
+      .map(vc => vc.trim().toLowerCase().slice(-40))
+      .filter(vc => vc.length > 0))]
 
     try {
       const cache = await getValidators()
@@ -141,7 +145,7 @@ function setRoutes(routerPrime) {
         metadata: {}
       }
 
-      withdrawal_credentials.forEach(wc => {
+      credentials.forEach(wc => {
         const validator = cache[wc]
         if (validator) {
           response.total_balance += validator.b
