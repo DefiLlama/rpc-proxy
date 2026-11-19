@@ -21,12 +21,19 @@ async function getCachedVaultTvl(vault, version) {
   if (!initialized)
     initialized = initialize()
 
-  await initialized
+  try {
+    await initialized
+  } catch (e) {
+    initialized = undefined
+    throw e
+  }
 
-  cachedTvl = getTvl()
-  cacheTimestamp = now
-  vaultTvls[vault] = { cachedTvl, cacheTimestamp }
-  return cachedTvl
+  const pending = getTvl()
+  vaultTvls[vault] = { cachedTvl: pending, cacheTimestamp: now }
+  pending.catch(() => {
+    if (vaultTvls[vault]?.cachedTvl === pending) delete vaultTvls[vault]
+  })
+  return pending
 
   async function getTvl() {
     const _client = version == 1 ? client_jlpdnv1 : client
