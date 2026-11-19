@@ -121,6 +121,9 @@ async function getValidators() {
   if (!cacheData)
     cacheData = readCache();
 
+  if (!cacheData)
+    throw new Error('beacon validator cache is unavailable');
+
   return cacheData.data
 }
 

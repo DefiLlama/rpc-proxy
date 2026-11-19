@@ -11,7 +11,7 @@ const chains = {
 
 function setRoutes(router) {
   // load cache
-  chains.beacon.getValidators()
+  chains.beacon.getValidators().catch((e) => console.error('Failed to warm beacon validator cache', e))
     
   Object.entries(chains).forEach(([chain, { setRoutes }]) => {
     console.log(`Setting routes for ${chain}`)
