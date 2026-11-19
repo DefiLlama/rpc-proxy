@@ -15,9 +15,15 @@ async function getCachedTvl() {
     return cachedTvl
 
 
-  cachedTvl = getTvl()
+  const pending = getTvl()
+  cachedTvl = pending
   cacheTimestamp = now
-  return cachedTvl
+  pending.catch(() => {
+    if (cachedTvl !== pending) return
+    cachedTvl = null
+    cacheTimestamp = null
+  })
+  return pending
 
   async function getTvl() {
     const connection = getConnection()
